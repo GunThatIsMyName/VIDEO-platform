@@ -1,20 +1,26 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addUsers } from "../redux/slice/userSlice";
+import { addUsers, errorUser, fetchUsers, loadingUser } from "../redux/slice/userSlice";
 import GitHubApi from "../utils/GithubApi";
 import MovieList from "./MovieList";
 
 const Home = () => {
   const dispatch=useDispatch();
   
-  const fetchMovies = async () => {
-    const { data } = await GitHubApi.get(`users`).catch((err) =>
-    console.log(err, "ERROR!!")
-    );
-    dispatch(addUsers(data));
-  };
+  // const fetchMovies = async () => {
+  //   dispatch(loadingUser())
+  //   try{
+  //     const { data } = await GitHubApi.get(`users`)
+  //     dispatch(addUsers(data));
+  //   }catch{
+  //     dispatch(errorUser());
+  //   }
+  // };
+
   useEffect(() => {
-    fetchMovies();
+    console.log("1")
+    dispatch(fetchUsers());
+    console.log("2")
   }, []);
 
   return (
