@@ -1,12 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUsers, errorUser, fetchUsers, loadingUser } from "../redux/slice/userSlice";
+import { fetchMyData } from "../redux/slice/myDataSlice";
+import {
+  addUsers,
+  errorUser,
+  fetchUsers,
+  loadingUser,
+} from "../redux/slice/userSlice";
 import GitHubApi from "../utils/GithubApi";
 import MovieList from "./MovieList";
 
 const Home = () => {
-  const dispatch=useDispatch();
-  
+  const [text, setText] = useState("");
+  const dispatch = useDispatch();
+
   // const fetchMovies = async () => {
   //   dispatch(loadingUser())
   //   try{
@@ -16,15 +23,24 @@ const Home = () => {
   //     dispatch(errorUser());
   //   }
   // };
+  const handleTextChange = useCallback((e) => setText(e.target.value), []);
 
   useEffect(() => {
-    console.log("1")
-    dispatch(fetchUsers());
-    console.log("2")
+    if (text !== "") {
+      dispatch(fetchUsers(text));
+    }
+  }, [text]);
+
+  useEffect(() => {
+    dispatch(fetchMyData());
   }, []);
 
   return (
     <div>
+      <form style={{ display: "flex", margin: "auto", justifyContent: "center" }}>
+        <input onChange={handleTextChange} type="text" />
+        <input type="button" value="button" />
+      </form>
       <div className="banner__image"></div>
       <MovieList />
     </div>

@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import GithubApi from "../../utils/GithubApi";
 
-export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-  const { data } = await GithubApi.get(`users`);
-  return data;
+export const fetchUsers = createAsyncThunk("users/fetchUsers", async (text) => {
+  const { data } = await GithubApi.get(`search/users?q=${text}`);
+  const {total_count,items}=data;
+  return {total_count,items};
 });
 
 const initialState = {
@@ -16,29 +17,30 @@ export const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    addUsers: (state, { payload }) => {
-      console.log(payload, "check Payload");
-      state.users = payload;
-      state.loading = false;
-      state.error = false;
-    },
-    loadingUser: (state) => {
-      console.log("Loading User");
-      state.loading = true;
-    },
-    errorUser: (state, payload) => {
-      console.log(payload, "Error Handle");
-      state.error = true;
-    },
+    // addUsers: (state, { payload }) => {
+    //   console.log(payload, "check Payload");
+    //   state.users = payload;
+    //   state.loading = false;
+    //   state.error = false;
+    // },
+    // loadingUser: (state) => {
+    //   console.log("Loading User");
+    //   state.loading = true;
+    // },
+    // errorUser: (state, payload) => {
+    //   console.log(payload, "Error Handle");
+    //   state.error = true;
+    // },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.pending, (state) => {
+      builder.addCase(fetchUsers.pending, (state) => {
+        console.log("@3")
       console.log("Pending");
       return { ...state, loading: true, error: false };
     });
     builder.addCase(fetchUsers.fulfilled, (state, { payload }) => {
       console.log("fetched Succeful!");
-      return { ...state, users: payload, loading: false, error: false };
+      return { ...state, users: payload.items, loading: false };
     });
     builder.addCase(fetchUsers.rejected, (state) => {
       console.log("Rejected!");

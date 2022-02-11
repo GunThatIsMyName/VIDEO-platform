@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { getAllUsers } from '../redux/slice/userSlice'
+import { UserListWrapper } from '../styles/MovieList.style';
 import Loader from './Loader';
 import UserCard from './UserCard';
 
@@ -16,18 +17,19 @@ const MovieList = () => {
   }
 
   const renderUsers=users.map(item=>{
+    console.log(item,"item")
     return <UserCard key={item.id} {...item} />
   })
 
   return (
-    <div className="user__wrapper">
+    <UserListWrapper className="user__wrapper">
       <div className="user__list">
         <h3>Users</h3>
         <div className="user__container">
           {renderUsers}
         </div>
       </div>
-    </div>
+    </UserListWrapper>
   )
 }
 
