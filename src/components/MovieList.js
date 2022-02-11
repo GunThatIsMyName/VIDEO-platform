@@ -17,7 +17,6 @@ const MovieList = () => {
   }
 
   const renderUsers=users.map(item=>{
-    console.log(item,"item")
     return <UserCard key={item.id} {...item} />
   })
 
